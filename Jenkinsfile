@@ -2,12 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Uncomment below if pushing to DockerHub
-        // DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         DOCKER_IMAGE = "employeeprofilemanagement_image"
     }
-//comment
-    // Various stages in the Pipeline Process:
+
     stages {
         stage('Checkout') {
             steps {
@@ -15,17 +12,25 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                // Build docker image using Dockerfile
-                bat "docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} -f Dockerfile ."
+                sh """
+                    docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} -f Dockerfile .
+                """
             }
         }
 
         stage('Run Container') {
             steps {
                 script {
-                    bat "docker run -d --name employeeprofilemanagement -p 8200:8200 ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                    // Stop & remove old container if it exists
+                    sh """
+                        if [ \$(docker ps -aq -f name=employeeprofilemanagement) ]; then
+                            docker rm -f employeeprofilemanagement || true
+                        fi
+
+                        docker run -d --name employeeprofilemanagement -p 8200:8200 ${DOCKER_IMAGE}:${BUILD_NUMBER}
+                    """
                 }
             }
         }
