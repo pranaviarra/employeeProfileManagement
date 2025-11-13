@@ -6,12 +6,12 @@ pipeline {
         // DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         DOCKER_IMAGE = "employeeprofilemanagement_image"
     }
-
+//comment
     // Various stages in the Pipeline Process:
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/pranaviarra/employeeProfileManagement.git'
+                git branch: 'main', url: 'https://github.com/pranaviarra/employeeProfileManagement.git'
             }
         }
 
