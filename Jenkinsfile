@@ -25,7 +25,7 @@ pipeline {
                 script {
                     // Stop & remove old container if it exists
                     sh """
-                        if [ \$(docker ps -aq -f name=employeeprofilemanagement) ]; then
+                        if [\$(docker ps -aq -f name=employeeprofilemanagement) ]; then
                             docker rm -f employeeprofilemanagement || true
                         fi
 
