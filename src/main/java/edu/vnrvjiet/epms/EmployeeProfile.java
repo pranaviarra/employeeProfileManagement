@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.net.URL;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,12 +13,6 @@ import java.net.URL;
 public class EmployeeProfile {
     @Id
     private Integer employeeId;
-    private String name;
-    private String mobile;
-    private String email;
-    private URL linkedInUrl;
-
-
-//    I would like to add a few more fields in future
-
+    private String employeeName;
+    private Double salary;
 }

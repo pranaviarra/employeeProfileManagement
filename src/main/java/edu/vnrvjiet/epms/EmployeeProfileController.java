@@ -1,51 +1,45 @@
 package edu.vnrvjiet.epms;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("emps")
+@RequestMapping("/employees")
 public class EmployeeProfileController {
 
-    @Autowired
-    private EmployeeProfileService employeeProfileService;
+    private final EmployeeProfileService employeeProfileService;
 
-    @PostMapping("addOne")
-    public ResponseEntity<EmployeeProfile> addOneEmployeeProfile(@RequestBody EmployeeProfile employeeProfile){
-        return saveEmployeeProfile(employeeProfile);
+    public EmployeeProfileController(EmployeeProfileService employeeProfileService) {
+        this.employeeProfileService = employeeProfileService;
     }
 
-    @GetMapping("findAll")
-    public ResponseEntity<List<EmployeeProfile>> findAllEmployeeProfiles(){
-        var list = employeeProfileService.findAll();
-        return new ResponseEntity<>(list, HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<EmployeeProfile> addEmployee(@RequestBody EmployeeProfile employeeProfile) {
+        return ResponseEntity.ok(employeeProfileService.save(employeeProfile));
     }
 
-    @GetMapping("findById/{employeeProfileId}")
-    public ResponseEntity<EmployeeProfile> findEmployeeProfileById(@PathVariable Integer employeeProfileId){
-        var employeeProfile = employeeProfileService.findById(employeeProfileId);
-        return new ResponseEntity<>(employeeProfile.orElse(null),HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<EmployeeProfile>> getAllEmployees() {
+        return ResponseEntity.ok(employeeProfileService.findAll());
     }
 
-
-    @DeleteMapping("deleteById")
-    public ResponseEntity<EmployeeProfile> deleteEmployeeProfileById(@RequestBody Integer employeeProfileId){
-        employeeProfileService.deleteById(employeeProfileId);
-        return  new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<EmployeeProfile> getEmployeeById(@PathVariable Integer id) {
+        return employeeProfileService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("update")
-    public ResponseEntity<EmployeeProfile> updateEmployeeProfile(@RequestBody EmployeeProfile employeeProfile){
-        return saveEmployeeProfile(employeeProfile);
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeProfile> updateEmployee(@PathVariable Integer id, @RequestBody EmployeeProfile employeeProfile) {
+        employeeProfile.setEmployeeId(id);
+        return ResponseEntity.ok(employeeProfileService.save(employeeProfile));
     }
 
-    private ResponseEntity<EmployeeProfile> saveEmployeeProfile(EmployeeProfile employeeProfile){
-        employeeProfile = employeeProfileService.save(employeeProfile);
-        return new ResponseEntity<>(employeeProfile,HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Integer id) {
+        employeeProfileService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

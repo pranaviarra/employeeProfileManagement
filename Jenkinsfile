@@ -9,36 +9,32 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/pranaviarra/employeeProfileManagement.git'
+                // Replace with your actual repo URL
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 sh """
-                    docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} -f Dockerfile .
+                    docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
                 """
             }
         }
 
         stage('Run Container') {
             steps {
-                script {
-                    // Stop & remove old container if it exists
-                    sh """
-                        if [\$(docker ps -aq -f name=employeeprofilemanagement) ]; then
-                            docker rm -f employeeprofilemanagement || true
-                        fi
-
-                        docker run -d --name employeeprofilemanagement -p 8200:8200 ${DOCKER_IMAGE}:${BUILD_NUMBER}
-                    """
-                }
+                sh """
+                    docker rm -f employeeprofilemanagement || true
+                    docker run -d --name employeeprofilemanagement -p 8200:8200 ${DOCKER_IMAGE}:${BUILD_NUMBER}
+                    docker ps
+                """
             }
         }
     }
 
     post {
         success {
-            echo "✅ Checkout, Build, Dockerize & Deploy completed successfully!"
+            echo "✅ Jenkins build and Docker container running successfully!"
         }
         failure {
             echo "❌ Build failed!"

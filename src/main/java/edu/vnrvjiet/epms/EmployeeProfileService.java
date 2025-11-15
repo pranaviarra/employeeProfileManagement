@@ -1,35 +1,31 @@
 package edu.vnrvjiet.epms;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class EmployeeProfileService {
 
-    @Autowired
-    EmployeeProfileRepository employeeProfileRepository;
+    private final EmployeeProfileRepository employeeProfileRepository;
 
-
-    public EmployeeProfile save(EmployeeProfile employeeProfile){
-        return  employeeProfileRepository.save(employeeProfile);
+    public EmployeeProfileService(EmployeeProfileRepository employeeProfileRepository) {
+        this.employeeProfileRepository = employeeProfileRepository;
     }
 
-    public Optional<EmployeeProfile> findById(Integer employeeProfileId){
-        return employeeProfileRepository.findById(employeeProfileId);
+    public EmployeeProfile save(EmployeeProfile employeeProfile) {
+        return employeeProfileRepository.save(employeeProfile);
     }
 
-    public Optional<EmployeeProfile> findByName(String name){
-        return employeeProfileRepository.findByName(name);
+    public Optional<EmployeeProfile> findById(Integer id) {
+        return employeeProfileRepository.findById(id);
     }
 
-    public List<EmployeeProfile> findAll(){
+    public List<EmployeeProfile> findAll() {
         return employeeProfileRepository.findAll();
     }
 
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         employeeProfileRepository.deleteById(id);
     }
 }
