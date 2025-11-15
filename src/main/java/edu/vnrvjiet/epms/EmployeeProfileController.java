@@ -32,6 +32,7 @@ public class EmployeeProfileController {
         return new ResponseEntity<>(employeeProfile.orElse(null),HttpStatus.OK);
     }
 
+
     @DeleteMapping("deleteById")
     public ResponseEntity<EmployeeProfile> deleteEmployeeProfileById(@RequestBody Integer employeeProfileId){
         employeeProfileService.deleteById(employeeProfileId);

@@ -12,6 +12,7 @@ public class EmployeeProfileService {
     @Autowired
     EmployeeProfileRepository employeeProfileRepository;
 
+
     public EmployeeProfile save(EmployeeProfile employeeProfile){
         return  employeeProfileRepository.save(employeeProfile);
     }
