@@ -8,6 +8,6 @@ public class EmployeeProfileManagementApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(EmployeeProfileManagementApplication.class, args);
-        System.out.println("✅ Employee Profile Management Service running on port 8200...");
+        System.out.println("Employee Profile Management Service running on port 8200...");
     }
 }
